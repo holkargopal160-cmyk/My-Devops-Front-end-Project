@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Attendance System - Fixed Combo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* --- GLOBAL CSS --- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: #f4f6f9; min-height: 100vh; }
+.hidden { display: none !important; }
+/* --- SCREEN 1: LOGIN --- */
+.login-screen {
+display: flex; flex-direction: column; justify-content: center; align-items: center;
+background: linear-gradient(to bottom, #1e70e0 45%, #f4f6f9 45%); min-height: 100vh; padding: 20px;
+}
+.login-card {
+background: #ffffff; border-radius: 4px; padding: 40px 35px;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); width: 100%; max-width: 420px; text-align: center;
+}
+.main-title { color: #ffffff; font-size: 2rem; font-weight: 600; margin-bottom: 30px; }
+.card-header { font-size: 1.25rem; color: #444; font-weight: 500; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+.form-group { text-align: left; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
+.form-group label { display: block; font-size: 0.75rem; font-weight: 600; color: #777; text-transform: uppercase; }
+.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; outline:
+none; }
+.form-group input:focus, .form-group select:focus { border-color: #3c8dbc; }
+.btn { width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 0.95rem; font-weight: 500; cursor: pointer; margin-bottom: 10px; }
+.btn-blue { background-color: #2e62db; color: white; }
+.forgot-password { display: block; text-align: left; font-size: 0.85rem; color: #1e70e0; text-decoration: none; margin-top: -10px; margin-bottom:
+25px; }
+/* --- MAIN SYSTEM LAYOUT (SIDEBAR + CONTENT) --- */
+.app-container { display: flex; min-height: 100vh; }
+.sidebar { width: 250px; background-color: #222d32; color: #b8c7ce; flex-shrink: 0; }
+.sidebar-brand { height: 50px; background-color: #367fa9; color: white; display: flex; align-items: center; padding: 0 15px; font-size: 1.05rem;
+font-weight: 400; font-style: italic; }
+.sidebar-brand i { margin-right: 8px; }
+.sidebar-menu { list-style: none; padding-top: 10px; }
+.sidebar-menu li a { display: block; padding: 12px 20px; color: #b8c7ce; text-decoration: none; font-size: 0.9rem; border-left: 3px solid transparent;
+}
+.sidebar-menu li.active a, .sidebar-menu li a:hover { color: #fff; background-color: #1e282c; border-left-color: #3c8dbc; }
+.sidebar-menu li a i { margin-right: 10px; width: 20px; }
+.main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.navbar { background-color: #3c8dbc; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color:
+white; }
+.content-view { padding: 25px; }.view-title { font-size: 1.5rem; color: #333; margin-bottom: 20px; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; font-weight: 500; }
+.center-title { text-align: center; margin-bottom: 30px; font-size: 1.6rem; color: #333; }
+/* --- DASHBOARD CARDS --- */
+.grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
+.info-card { background: white; border-radius: 4px; display: flex; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid
+#d2d6de; overflow: hidden; }
+.card-icon { width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: white; }
+.bg-blue { background-color: #3b82f6; }
+.bg-mustard { background-color: #dfa82b; }
+.bg-cyan { background-color: #17a2b8; }
+.card-details { padding: 15px; }
+.card-label { font-size: 0.85rem; text-transform: uppercase; color: #777; font-weight: 600; }
+.card-value { font-size: 1.6rem; font-weight: bold; color: #333; }
+.section-heading { text-align: center; font-size: 1.4rem; color: #2c3e50; margin: 25px 0; font-weight: 500; }
+/* --- FORM STRUCTURES --- */
+.form-box { background: white; padding: 30px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-top: 3px solid #d2d6de; }
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 30px; row-gap: 15px; }
+.full-width { grid-column: span 2; }
+.btn-submit { background-color: #3b82f6; color: white; border: none; padding: 10px 25px; font-size: 0.95rem; border-radius: 4px; cursor: pointer;
+margin-top: 15px; }
+.btn-submit:hover { background-color: #2563eb; }
+/* --- ALREADY MARKED SCREEN --- */
+.status-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+.status-badge { width: 140px; height: 160px; background: #fff; border: 4px solid #dfa82b; border-radius: 12px; display: flex; flex-direction: column;
+align-items: center; justify-content: center; margin-bottom: 25px; position: relative;}
+.status-badge i { font-size: 4.5rem; color: #dfa82b; }
+.check-circle { position: absolute; bottom: -10px; width: 30px; height: 30px; background: #5cb85c; border-radius: 50%; display: flex; align-items:
+center; justify-content: center; color: white; font-size: 0.9rem; }
+.status-main-msg { color: #2e62db; font-size: 1.8rem; font-weight: 500; margin-bottom: 10px; }
+.status-sub-msg { color: #e11d48; font-size: 1.1rem; margin-bottom: 30px; }
+.status-info-row { display: flex; width: 100%; max-width: 400px; justify-content: space-between; padding: 10px 0; font-size: 0.95rem; color: #555;
+border-bottom: 1px dashed #ddd; }
+.btn-checkout { background-color: #f43f5e; color: white; border: none; padding: 10px 30px; font-size: 0.95rem; border-radius: 4px; cursor:
+pointer; margin-top: 30px; }
+.btn-checkout:hover { background-color: #e11d48; }
+</style>
+</head>
+<body>
+<div class="login-screen" id="loginScreen">
+<h1 class="main-title">Employee Attendance System</h1>
+<div class="login-card">
+<div class="card-header"><i class="fa-solid fa-user"></i> Sign In | Admin</div>
+<form id="loginForm">
+<div class="form-group">
+<label>Username</label>
+<input type="text" id="username" placeholder="Username (Type: admin)" required>
+</div>
+<div class="form-group">
+<label>Password</label>
+<input type="password" id="password" placeholder="Password (Type: 12345)" required>
+</div>
+<a href="#" class="forgot-password">Forgot Password?</a>
+<button type="submit" class="btn btn-blue">SIGN IN</button>
+</form></div>
+</div>
+<div class="app-container hidden" id="appSystem">
+<div class="sidebar">
+<div class="sidebar-brand"><i class="fa-solid fa-graduation-cap"></i> Employee Attendance</div>
+<ul class="sidebar-menu">
+<li id="menu-dashboard" class="active"><a href="#" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+<li id="menu-add-emp"><a href="#" onclick="switchView('add-emp')"><i class="fa-solid fa-user-plus"></i> Add Employee</a></li>
+<li id="menu-attendance"><a href="#" onclick="switchView('attendance')"><i class="fa-solid fa-clipboard-user"></i> Mark Attendance</a></li>
+<li><a href="#" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a></li>
+</ul>
+</div>
+<div class="main-content">
+<div class="navbar">
+<div><i class="fa-solid fa-bars"></i> Employee Attendance</div>
+<div><i class="fa-solid fa-user-gear"></i> Welcome Admin</div>
+</div>
+<div class="content-view" id="dashboardView">
+<div class="view-title"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+<div class="grid-container">
+<div class="info-card">
+<div class="card-icon bg-blue"><i class="fa-solid fa-users"></i></div>
+<div class="card-details"><div class="card-label">Registered Employees</div><div class="card-value">4</div></div>
+</div>
+<div class="info-card">
+<div class="card-icon bg-mustard"><i class="fa-solid fa-copy"></i></div>
+<div class="card-details"><div class="card-label">Listed Departments</div><div class="card-value">5</div></div>
+</div>
+</div>
+<div class="section-heading">Attendance Details</div>
+<div class="grid-container">
+<div class="info-card">
+<div class="card-icon bg-cyan"><i class="fa-solid fa-file-invoice"></i></div>
+<div class="card-details"><div class="card-label">Employee Checkin Today</div><div class="card-value"
+id="dashTodayCheckin">0</div></div>
+</div>
+<div class="info-card">
+<div class="card-icon bg-mustard"><i class="fa-solid fa-calendar-days"></i></div>
+<div class="card-details"><div class="card-label">Employee Checkin Yesterday</div><div class="card-value">1</div></div>
+</div>
+</div>
+</div>
+<div class="content-view hidden" id="addEmpView">
+<div class="form-box">
+<h2 class="center-title">Add Employee</h2>
+<form id="addEmployeeForm">
+<div class="form-grid">
+<div class="form-group full-width"><label>Emp ID</label><input type="text" placeholder="Enter your EmpId" required></div>
+<div class="form-group"><label>First Name</label><input type="text" placeholder="Enter your First Name" required></div>
+<div class="form-group"><label>Last Name</label><input type="text" placeholder="Enter your Last Name" required></div>
+<div class="form-group"><label>Department</label><select required><option value="" selected disabled>--select--</option><option>IT
+Department</option><option>HR Department</option></select></div>
+<div class="form-group"><label>Email ID</label><input type="email" placeholder="Enter your Email ID" required></div>
+<div class="form-group"><label>Mobile No</label><input type="tel" placeholder="Enter your Mobile No" required></div><div class="form-group"><label>Country</label><input type="text" placeholder="Enter your Country"></div>
+<div class="form-group"><label>State</label><input type="text" placeholder="Enter your State"></div>
+<div class="form-group"><label>City</label><input type="text" placeholder="Enter your City"></div>
+<div class="form-group"><label>DOB</label><input type="date" required></div>
+<div class="form-group"><label>Date of Joining</label><input type="date" required></div>
+<div class="form-group"><label>Photo</label><input type="file" accept="image/*"></div>
+<div class="form-group full-width"><label>Address</label><input type="text" placeholder="Enter your Address"></div>
+<div class="form-group"><label>Password</label><input type="password" placeholder="Enter your Password" required></div>
+<div class="form-group"><label>Confirm Password</label><input type="password" placeholder="Confirm Password" required></div>
+</div>
+<button type="submit" class="btn-submit">Submit</button>
+</form>
+</div>
+</div>
+<div class="content-view hidden" id="attendanceFormView">
+<div class="form-box">
+<h2 class="center-title">Mark Todays Attendance</h2>
+<form id="attendanceForm">
+<div class="form-grid">
+<div class="form-group"><label>IP Address</label><input type="text" class="ipField" readonly></div>
+<div class="form-group"><label>Check In Time (Current Time)</label><input type="text" class="clockField" readonly></div>
+<div class="form-group full-width"><label>Remark (If any)</label><input type="text" placeholder="Enter Remark (If any)"></div>
+</div>
+<button type="submit" class="btn-submit">Submit</button>
+</form>
+</div>
+</div>
+<div class="content-view hidden" id="alreadyMarkedView">
+<div class="form-box">
+<h2 class="center-title">Mark Todays Attendance</h2>
+<div class="status-container">
+<div class="status-badge">
+<i class="fa-regular fa-clipboard"></i>
+<div class="check-circle"><i class="fa-solid fa-check"></i></div>
+</div>
+<div class="status-main-msg">Todays attendance already marked</div>
+<div class="status-sub-msg">See you tomorrow</div>
+<div class="status-info-row">
+<span>Checkin IP</span>
+<span class="ipField">127.0.0.1</span>
+</div>
+<div class="status-info-row">
+<span>Checkin Time</span>
+<span id="savedCheckinTime">--</span>
+</div>
+<button class="btn-checkout" onclick="performCheckout()">Checkout</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>let isAttendanceMarked = false;
+let clockInterval;
+// FIXED LOGIN HANDLING HERE
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+const u = document.getElementById('username').value.trim();
+const p = document.getElementById('password').value.trim();
+if(u === "admin" && p === "12345") {
+switchView('dashboard');
+} else {
+alert("Galat Username ya Password! Sahi details dalein:\nUsername: admin\nPassword: 12345");
+}
+});
+// View Router
+function switchView(viewName) {
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('appSystem').classList.remove('hidden');
+document.getElementById('dashboardView').classList.add('hidden');
+document.getElementById('addEmpView').classList.add('hidden');
+document.getElementById('attendanceFormView').classList.add('hidden');
+document.getElementById('alreadyMarkedView').classList.add('hidden');
+document.getElementById('menu-dashboard').classList.remove('active');
+document.getElementById('menu-add-emp').classList.remove('active');
+document.getElementById('menu-attendance').classList.remove('active');
+if(viewName === 'dashboard') {
+document.getElementById('dashboardView').classList.remove('hidden');
+document.getElementById('menu-dashboard').classList.add('active');
+} else if(viewName === 'add-emp') {
+document.getElementById('addEmpView').classList.remove('hidden');
+document.getElementById('menu-add-emp').classList.add('active');
+} else if(viewName === 'attendance') {
+document.getElementById('menu-attendance').classList.add('active');
+if(isAttendanceMarked) {
+document.getElementById('alreadyMarkedView').classList.remove('hidden');
+} else {
+document.getElementById('attendanceFormView').classList.remove('hidden');
+initLiveSystem();
+}
+}
+}
+function initLiveSystem() {
+if(clockInterval) clearInterval(clockInterval);
+clockInterval = setInterval(() => {
+const now = new Date();
+const d = String(now.getDate()).padStart(2,'0')+"-"+String(now.getMonth()+1).padStart(2,'0')+"-"+now.getFullYear();
+const t = String(now.getHours()).padStart(2,'0')+":"+String(now.getMinutes()).padStart(2,'0')+":"+String(now.getSeconds()).padStart(2,'0');
+document.querySelectorAll('.clockField').forEach(el => el.value = `${d} ${t}`);
+}, 1000);
+fetch('https://api.ipify.org?format=json')
+.then(res => res.json()).then(data => {
+document.querySelectorAll('.ipField').forEach(el => {
+if(el.tagName === "INPUT") el.value = data.ip;
+else el.textContent = data.ip;
+});
+}).catch(() => {
+document.querySelectorAll('.ipField').forEach(el => {
+if(el.tagName === "INPUT") el.value = "127.0.0.1";
+else el.textContent = "127.0.0.1";
+});
+});
+}
+document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+e.preventDefault();
+isAttendanceMarked = true;
+const currentTime = document.querySelector('.clockField').value;
+document.getElementById('savedCheckinTime').textContent = currentTime;
+document.getElementById('dashTodayCheckin').textContent = "1";
+alert("Attendance marked successfully!");
+switchView('attendance');
+});
+function performCheckout() {
+isAttendanceMarked = false;
+document.getElementById('dashTodayCheckin').textContent = "0";
+alert("Checkout success! Kal dobara attendance mark karein.");
+switchView('attendance');
+}
+document.getElementById('addEmployeeForm').addEventListener('submit', function(e) {
+e.preventDefault();
+alert("Employee Profile Added Successfully!");
+this.reset();
+});
+function logout() {
+if(clockInterval) clearInterval(clockInterval);
+document.getElementById('appSystem').classList.add('hidden');
+document.getElementById('loginScreen').classList.remove('hidden');
+document.getElementById('loginForm').reset();
+}
+</script>
+</body>
+</html>
