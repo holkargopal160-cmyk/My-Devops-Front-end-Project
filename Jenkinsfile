@@ -1,17 +1,15 @@
-groovy
-
-pipline{
+pipline {
     agent any
 
-    stages{
-        stage('Docker Build'){
-            steps{
+    stages {
+        stage('Docker Build') {
+            steps {
                 sh 'docker build -t my-frontend-image:latest .'
             }
         }
 
-        stage('Run Container'){
-            steps{
+        stage('Run Container') {
+            steps {
                 sh 'docker stop my-frontend-app || true'
                 sh 'docker rm my-frontend-app || true'
                 //yahan bhi wahi same naam hona chahiye
@@ -19,5 +17,5 @@ pipline{
             }
         }
     }
-    
+
 }
