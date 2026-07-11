@@ -12,7 +12,7 @@ pipeline {
             steps {
                 sh 'docker stop my-frontend-app || true'
                 sh 'docker rm my-frontend-app || true'
-                sh 'docker run -d --name my frontend-app -p 8081:80 my-frontend-image:latest'
+                sh 'docker run -d --name my-frontend-app -p 8081:80 my-frontend-image:latest'
             }
         }
     }
